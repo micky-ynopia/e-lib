@@ -12,23 +12,23 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
+        // Create admin account (highest privileges use librarian role)
+        $admin = User::firstOrNew(['email' => 'admin@nemsu.edu.ph']);
+        $admin->name = 'System Admin';
+        $admin->password = 'password123'; // Will be hashed automatically by the 'hashed' cast
+        $admin->role = 'librarian';
+        $admin->is_approved = true;
+        $admin->approved_at = now();
+        $admin->save();
+
         // Create librarian account
         $librarian = User::firstOrNew(['email' => 'librarian@nemsu.edu.ph']);
-        $librarian->name = 'Librarian Admin';
+        $librarian->name = 'Library Librarian';
         $librarian->password = 'password123'; // Will be hashed automatically by the 'hashed' cast
         $librarian->role = 'librarian';
         $librarian->is_approved = true;
         $librarian->approved_at = now();
         $librarian->save();
-
-        // Create staff account
-        $staff = User::firstOrNew(['email' => 'staff@nemsu.edu.ph']);
-        $staff->name = 'Library Staff';
-        $staff->password = 'password123'; // Will be hashed automatically by the 'hashed' cast
-        $staff->role = 'staff';
-        $staff->is_approved = true;
-        $staff->approved_at = now();
-        $staff->save();
 
         // Create sample student account
         $student = User::firstOrNew(['email' => 'student@nemsu.edu.ph']);
@@ -44,8 +44,8 @@ class AdminUserSeeder extends Seeder
         $student->save();
 
         $this->command->info('Admin users created successfully!');
+        $this->command->info('Admin: admin@nemsu.edu.ph / password123');
         $this->command->info('Librarian: librarian@nemsu.edu.ph / password123');
-        $this->command->info('Staff: staff@nemsu.edu.ph / password123');
         $this->command->info('Student: student@nemsu.edu.ph / password123');
     }
 }

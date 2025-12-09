@@ -16,7 +16,8 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'sqlite'),
+    // Force SQLite as the default connection so no env change is needed
+    'default' => 'sqlite',
 
     /*
     |--------------------------------------------------------------------------

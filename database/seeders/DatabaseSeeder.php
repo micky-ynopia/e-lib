@@ -9,6 +9,7 @@ use App\Models\Book;
 use App\Models\Borrow;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Artisan;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,6 +18,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(AdminUserSeeder::class);
+
         $user = User::factory()->create([
             'name' => 'Librarian',
             'email' => 'librarian@example.com',
@@ -43,6 +46,8 @@ class DatabaseSeeder extends Seeder
                 'published_year' => 1949,
                 'total_copies' => 5,
                 'available_copies' => 5,
+                'book_type' => 'digital',
+                'status' => 'approved',
             ],
             [
                 'title' => 'Pride and Prejudice',
@@ -52,6 +57,8 @@ class DatabaseSeeder extends Seeder
                 'published_year' => 1813,
                 'total_copies' => 3,
                 'available_copies' => 3,
+                'book_type' => 'digital',
+                'status' => 'approved',
             ],
             [
                 'title' => 'Things Fall Apart',
@@ -61,6 +68,8 @@ class DatabaseSeeder extends Seeder
                 'published_year' => 1958,
                 'total_copies' => 4,
                 'available_copies' => 4,
+                'book_type' => 'digital',
+                'status' => 'approved',
             ],
         ])->map(fn ($data) => Book::create($data));
 
@@ -71,5 +80,8 @@ class DatabaseSeeder extends Seeder
             'due_at' => now()->addDays(12),
             'status' => 'borrowed',
         ]);
+
+        // Generate placeholder PDFs for digital books so they can be read/downloaded
+        Artisan::call('books:add-sample-pdfs', ['--force' => true]);
     }
 }
