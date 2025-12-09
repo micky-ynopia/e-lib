@@ -1,0 +1,164 @@
+erDiagram
+  USERS {
+    bigint id PK
+    string name
+    string email
+    string password
+    string role
+    string student_id
+    string course
+    string year_level
+    string phone
+    boolean is_approved
+    datetime approved_at
+  }
+
+  AUTHORS {
+    bigint id PK
+    string first_name
+    string last_name
+    string bio
+  }
+
+  CATEGORIES {
+    bigint id PK
+    string name
+    string description
+  }
+
+  BOOKS {
+    bigint id PK
+    string title
+    bigint author_id FK
+    bigint category_id FK
+    string isbn UNIQUE
+    int published_year
+    int total_copies
+    int available_copies
+    string book_type
+    string file_path
+    string file_name
+    string file_size
+    string cover_image
+    string description
+    string status
+    bigint approved_by FK
+    datetime approved_at
+    string rejection_reason
+    boolean is_featured
+    int download_count
+    int view_count
+  }
+
+  BORROWS {
+    bigint id PK
+    bigint user_id FK
+    bigint book_id FK
+    date borrowed_at
+    date due_at
+    date returned_at
+    string status
+  }
+
+  BOOK_REQUESTS {
+    bigint id PK
+    string request_id UNIQUE
+    bigint user_id FK
+    bigint book_id FK
+    string request_type
+    string status
+    string notes
+    datetime requested_at
+    datetime approved_at
+    datetime fulfilled_at
+    bigint approved_by FK
+    bigint fulfilled_by FK
+  }
+
+  FAVORITES {
+    bigint id PK
+    bigint user_id FK
+    bigint book_id FK
+  }
+
+  RESERVES {
+    bigint id PK
+    bigint user_id FK
+    bigint book_id FK
+    string status
+    datetime reserved_at
+    datetime notified_at
+    datetime expires_at
+    string notes
+  }
+
+  REVIEWS {
+    bigint id PK
+    bigint user_id FK
+    bigint book_id FK
+    int rating
+    string comment
+    boolean is_approved
+  }
+
+  THESES {
+    bigint id PK
+    string title
+    string abstract
+    string author_name
+    string author_student_id
+    string course
+    string year_level
+    string academic_year
+    string adviser_name
+    string adviser_email
+    string keywords
+    string file_path
+    string file_name
+    string file_size
+    string status
+    boolean is_public
+    bigint approved_by FK
+    datetime approved_at
+    string rejection_reason
+    bigint submitted_by FK
+  }
+
+  ANNOUNCEMENTS {
+    bigint id PK
+    string title
+    string content
+    string type
+    string priority
+    boolean is_published
+    datetime published_at
+    datetime expires_at
+    bigint created_by FK
+  }
+
+  AUTHORS ||--o{ BOOKS : "has many"
+  CATEGORIES ||--o{ BOOKS : "has many"
+  USERS ||--o{ BOOKS : "approves (approved_by)"
+
+  BOOKS ||--o{ BORROWS : "has many"
+  USERS ||--o{ BORROWS : "has many"
+
+  BOOKS ||--o{ BOOK_REQUESTS : "has many"
+  USERS ||--o{ BOOK_REQUESTS : "requests"
+  USERS ||--o{ BOOK_REQUESTS : "approves (approved_by)"
+  USERS ||--o{ BOOK_REQUESTS : "fulfills (fulfilled_by)"
+
+  BOOKS ||--o{ FAVORITES : "has many"
+  USERS ||--o{ FAVORITES : "has many"
+
+  BOOKS ||--o{ RESERVES : "has many"
+  USERS ||--o{ RESERVES : "has many"
+
+  BOOKS ||--o{ REVIEWS : "has many"
+  USERS ||--o{ REVIEWS : "has many"
+
+  USERS ||--o{ THESES : "approves (approved_by)"
+  USERS ||--o{ THESES : "submits (submitted_by)"
+
+  USERS ||--o{ ANNOUNCEMENTS : "creates (created_by)"
+
